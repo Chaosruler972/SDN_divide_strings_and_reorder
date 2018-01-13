@@ -1,7 +1,8 @@
 import random
-
-from Crypto.PublicKey import RSA
 from multiprocessing.dummy import Pool as ThreadPool
+
+import onetimepad
+from Crypto.PublicKey import RSA
 
 debug = 0
 
@@ -60,7 +61,7 @@ class Server:
 
 
 class Controller:
-    def __init__(self, whatever_was_sent):
+    def __init__(self, whatever_was_sent, one_time_pad_xor_key):
         """
 
         :type whatever_was_sent: Could be a Controller, therefore I "clone" the controller's amount of
@@ -73,6 +74,7 @@ class Controller:
             for i in range(0, self.arr_size):
                 self.arr.append(Server(i))
         else:
+            whatever_was_sent = onetimepad.decrypt(whatever_was_sent, one_time_pad_xor_key)
             if len(whatever_was_sent) % 2 != 0:
                 whatever_was_sent = whatever_was_sent + " "
             self.message = whatever_was_sent
